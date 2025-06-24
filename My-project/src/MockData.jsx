@@ -1,4 +1,4 @@
-const menuItems = [
+ export const menuItems = [
   { id: 1, name: 'Hamburger', price: 300, icon: '🍔' },
   { id: 2, name: 'Chicken Nuggets', price: 300, icon: '🍗' },
   { id: 3, name: 'Submarine Sandwich', price: 300, icon: '🥪' },
@@ -6,7 +6,7 @@ const menuItems = [
 ];
 
 // Mock data for orders
-const initialOrders = [
+export const initialOrders = [
   { id: 21, customerName: 'Sumit Saha', items: 5, amount: 123123, status: 'PENDING' },
   { id: 22, customerName: 'Akash Ahmed', items: 5, amount: 123123, status: 'DELIVERED' },
   { id: 23, customerName: 'Saad Hasan', items: 5, amount: 123123, status: 'PENDING' },
