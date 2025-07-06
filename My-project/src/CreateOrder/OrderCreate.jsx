@@ -6,7 +6,7 @@ export default function OrderCreate({
   menuItems,
   onAddToCart,
   onRemoveFromCart,
- onPlaceOrder, customerName ,setCustomerName,total
+ onPlaceOrder, customerName ,setCustomerName,total,items
 }) {
 
   return (
@@ -37,11 +37,11 @@ export default function OrderCreate({
       </div>
       </div>
 
-      <button 
-      onClick={onPlaceOrder}
-      disabled={!customerName.trim() || total === 0}
-
-      class="w-full bg-primary hover:bg-opacity-90 text-white font-medium py-3 rounded-full transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+       <button
+        onClick={onPlaceOrder}
+        disabled={!customerName || !items.some(item => item.quantity > 0)}
+        className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-4 rounded-lg font-medium text-lg transition-colors"
+      >
         Place Order (BDT {total})
       </button>
     </div>

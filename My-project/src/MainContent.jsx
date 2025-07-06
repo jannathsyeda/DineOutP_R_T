@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import TotalOrder from "./TotalOrder";
 import PendingOrders from "./PendingOrders";
 import DeliverOrders from "./DeliverOrders";
@@ -6,76 +6,148 @@ import OrderReports from "./OrderReports";
 import OrderCreate from "./CreateOrder/OrderCreate";
 
 export default function MainContent() {
-  const [customerName, setCustomerName] = useState("");
   const [items, setItems] = useState([
     {
       id: 1,
-      name: 'Hamburger',
+      name: "Hamburger",
       price: 300,
       quantity: 0,
-      icon: '🍔'
+      icon: "🍔",
     },
     {
       id: 2,
-      name: 'Chicken Nuggets',
+      name: "Chicken Nuggets",
       price: 300,
       quantity: 0,
-      icon: '🍗'
+      icon: "🍗",
     },
     {
       id: 3,
-      name: 'Submarine Sandwich',
+      name: "Submarine Sandwich",
       price: 300,
       quantity: 0,
-      icon: '🥪'
+      icon: "🥪",
     },
     {
       id: 4,
-      name: 'Pizza slices',
+      name: "Pizza slices",
       price: 300,
       quantity: 0,
-      icon: '🍕',
-      bgColor: 'bg-yellow-600'
-    }
+      icon: "🍕",
+      bgColor: "bg-yellow-600",
+    },
   ]);
+
+  const [orders, setOrders] = useState([
+    {
+      id: 21,
+      customerName: "Sumit Saha",
+      items: 5,
+      amount: 123123,
+      status: "PENDING",
+    },
+    {
+      id: 22,
+      customerName: "Akash Ahmed",
+      items: 5,
+      amount: 123123,
+      status: "DELIVERED",
+    },
+    {
+      id: 23,
+      customerName: "Saad Hasan",
+      items: 5,
+      amount: 123123,
+      status: "PENDING",
+    },
+    {
+      id: 24,
+      customerName: "MD Salahuddin",
+      items: 5,
+      amount: 123123,
+      status: "PENDING",
+    },
+    {
+      id: 25,
+      customerName: "Ferdous",
+      items: 5,
+      amount: 123123,
+      status: "PENDING",
+    },
+    {
+      id: 26,
+      customerName: "Rafe",
+      items: 5,
+      amount: 123123,
+      status: "PENDING",
+    },
+    {
+      id: 27,
+      customerName: "Sarwar",
+      items: 5,
+      amount: 123123,
+      status: "PENDING",
+    },
+    {
+      id: 28,
+      customerName: "Obaidul",
+      items: 5,
+      amount: 123123,
+      status: "PENDING",
+    },
+  ]);
+
+  const [customerName, setCustomerName] = useState("");
+  const [filter, setFilter] = useState('All');
 
 
   const handleAddToCart = (itemId) => {
-    setItems(prevItems =>
-      prevItems.map(item =>
-        item.id === itemId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
   };
 
-   const handleRemoveFromCart = (itemId) => {
-    setItems(prevItems =>
-      prevItems.map(item =>
+  const handleRemoveFromCart = (itemId) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
         item.id === itemId && item.quantity > 0
           ? { ...item, quantity: Math.max(0, item.quantity - 1) }
           : item
       )
     );
   };
- const handlePlaceOrder = () => {
-    const orderItems = items.filter(item => item.quantity > 0);
-    if (customerName.trim() && orderItems.length > 0) {
-      alert(`Order placed for ${customerName}!\nItems: ${orderItems.map(item => 
-        `${item.name} x${item.quantity}`
-      ).join(', ')}\nTotal: BDT ${calculateTotal()}`);
-      
-      // Reset form
-      setCustomerName('');
-      setItems(prevItems => prevItems.map(item => ({ ...item, quantity: 0 })));
+  const totalOrders = orders.length;
+  const pendingOrders = orders.filter(
+    (order) => order.status === "PENDING"
+  ).length;
+  const deliveredOrders = orders.filter(
+    (order) => order.status === "DELIVERED"
+  ).length;
+  const totalOrderValue = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const handlePlaceOrder = () => {
+    if (customerName && items.some((item) => item.quantity > 0)) {
+      const newOrder = {
+        id: Date.now(),
+        customerName,
+        items: items.reduce((sum, item) => sum + item.quantity, 0),
+        amount: totalOrderValue,
+        status: "PENDING",
+      };
+      setOrders([newOrder, ...orders]);
+      setCustomerName("");
+      setItems(items.map((item) => ({ ...item, quantity: 0 })));
     }
   };
-
+console.log(orders)
   const calculateTotal = () => {
-    return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return items.reduce((total, item) => total + item.price * item.quantity, 0);
   };
-
 
   return (
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 flex-grow">
@@ -87,21 +159,25 @@ export default function MainContent() {
         onRemoveFromCart={handleRemoveFromCart}
         onPlaceOrder={handlePlaceOrder}
         total={calculateTotal()}
+        items={items}
       />
 
       <div class="md:col-span-2 h-[calc(100vh_-_130px)]">
         <div>
           <h2 class="text-xl font-bold mb-4">Order Summary</h2>
           <div class="grid grid-cols-3 gap-4 mb-6">
-            <TotalOrder />
+            <TotalOrder totalOrders={totalOrders}/>
 
-            <PendingOrders />
+            <PendingOrders pendingOrders={pendingOrders} />
 
-            <DeliverOrders />
+            <DeliverOrders deliveredOrders={deliveredOrders} />
           </div>
         </div>
 
-        <OrderReports />
+        <OrderReports                filter={filter}
+         orders={orders}             setFilter={setFilter} 
+
+/>
       </div>
     </div>
   );
