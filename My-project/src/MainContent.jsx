@@ -93,13 +93,12 @@ export default function MainContent() {
       customerName: "Obaidul",
       items: 5,
       amount: 123123,
-      status: "PENDING",
+      status: "DELIVERED",
     },
   ]);
 
   const [customerName, setCustomerName] = useState("");
-  const [filter, setFilter] = useState('All');
-
+  const [filter, setFilter] = useState("All");
 
   const handleAddToCart = (itemId) => {
     setItems((prevItems) =>
@@ -133,7 +132,7 @@ export default function MainContent() {
   const handlePlaceOrder = () => {
     if (customerName && items.some((item) => item.quantity > 0)) {
       const newOrder = {
-        id: Date.now(),
+        id: crypto.randomUUID(),
         customerName,
         items: items.reduce((sum, item) => sum + item.quantity, 0),
         amount: totalOrderValue,
@@ -144,10 +143,21 @@ export default function MainContent() {
       setItems(items.map((item) => ({ ...item, quantity: 0 })));
     }
   };
-console.log(orders)
   const calculateTotal = () => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   };
+
+    const handleDeliverOrder = (orderId) => {
+  const newOrders = orders.map((order) =>
+    order.id === orderId ? { ...order, status: 'DELIVERED' } : order
+  );
+  setOrders(newOrders);
+};
+
+const handleDeleteOrder = (orderId) => {
+  const newOrders = orders.filter((order) => order.id !== orderId);
+  setOrders(newOrders);
+};
 
   return (
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 flex-grow">
@@ -166,7 +176,7 @@ console.log(orders)
         <div>
           <h2 class="text-xl font-bold mb-4">Order Summary</h2>
           <div class="grid grid-cols-3 gap-4 mb-6">
-            <TotalOrder totalOrders={totalOrders}/>
+            <TotalOrder totalOrders={totalOrders} />
 
             <PendingOrders pendingOrders={pendingOrders} />
 
@@ -174,10 +184,7 @@ console.log(orders)
           </div>
         </div>
 
-        <OrderReports                filter={filter}
-         orders={orders}             setFilter={setFilter} 
-
-/>
+        <OrderReports filter={filter} orders={orders} setFilter={setFilter} handleDeleteOrder={handleDeleteOrder} handleDeliverOrder={handleDeliverOrder}/>
       </div>
     </div>
   );
