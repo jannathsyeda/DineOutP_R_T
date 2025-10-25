@@ -5,6 +5,7 @@ import DeliverOrders from "./DeliverOrders";
 import OrderReports from "./OrderReports";
 import OrderCreate from "./CreateOrder/OrderCreate";
 
+import Navbar from './Navbar'
 export default function MainContent() {
   const [items, setItems] = useState([
     {
@@ -147,19 +148,22 @@ export default function MainContent() {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-    const handleDeliverOrder = (orderId) => {
-  const newOrders = orders.map((order) =>
-    order.id === orderId ? { ...order, status: 'DELIVERED' } : order
-  );
-  setOrders(newOrders);
-};
+  const handleDeliverOrder = (orderId) => {
+    const newOrders = orders.map((order) =>
+      order.id === orderId ? { ...order, status: "DELIVERED" } : order
+    );
+    setOrders(newOrders);
+  };
 
-const handleDeleteOrder = (orderId) => {
-  const newOrders = orders.filter((order) => order.id !== orderId);
-  setOrders(newOrders);
-};
+  const handleDeleteOrder = (orderId) => {
+    const newOrders = orders.filter((order) => order.id !== orderId);
+    setOrders(newOrders);
+  };
 
   return (
+        <div class="container mx-auto px-4 h-screen flex flex-col">
+          <Navbar/>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 flex-grow">
       <OrderCreate
         menuItems={items}
@@ -184,8 +188,14 @@ const handleDeleteOrder = (orderId) => {
           </div>
         </div>
 
-        <OrderReports filter={filter} orders={orders} setFilter={setFilter} handleDeleteOrder={handleDeleteOrder} handleDeliverOrder={handleDeliverOrder}/>
+        <OrderReports
+          filter={filter}
+          orders={orders}
+          setFilter={setFilter}
+          handleDeleteOrder={handleDeleteOrder}
+          handleDeliverOrder={handleDeliverOrder}
+        />
       </div>
     </div>
-  );
+  </div>);
 }
