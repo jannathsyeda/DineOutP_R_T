@@ -42,21 +42,21 @@ export default function MainContent() {
   const [orders, setOrders] = useState([
     {
       id: 21,
-      customerName: "Sumit Saha",
+      customerName: "Anis",
       items: 5,
       amount: 123123,
       status: "PENDING",
     },
     {
       id: 22,
-      customerName: "Akash Ahmed",
+      customerName: "Amit",
       items: 5,
       amount: 123123,
       status: "DELIVERED",
     },
     {
       id: 23,
-      customerName: "Saad Hasan",
+      customerName: "Omit",
       items: 5,
       amount: 123123,
       status: "PENDING",
